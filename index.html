@@ -4,118 +4,292 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZRV MINER PLATFORM</title>
+    <!-- Офіційний скрипт Telegram WebApp SDK -->
     <script src="https://telegram.org"></script>
     <style>
-        :root { --bg-color: #050b1e; --neon-blue: #00d2ff; --neon-yellow: #ffd700; --btn-yellow: #ffcc00; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; user-select: none; -webkit-user-select: none; }
-        body { background-color: var(--bg-color); color: #ffffff; display: flex; flex-direction: column; height: 100vh; overflow: hidden; text-align: center; }
-        .header { padding: 20px 10px; flex-shrink: 0; }
-        .main-balance { font-size: 32px; font-weight: bold; color: var(--neon-yellow); margin: 5px 0; }
-        .content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .page { display: none; width: 100%; }
-        .page.active { display: flex; flex-direction: column; align-items: center; }
-        .coin-btn { width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, #ffe866 0%, #ffc400 70%); border: 8px solid var(--neon-blue); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: bold; color: #050b1e; margin: 30px 0; }
-        .action-btn { background: var(--btn-yellow); color: #000; border: none; padding: 15px 30px; border-radius: 10px; font-size: 16px; font-weight: bold; text-transform: uppercase; }
-        .list-container { width: 100%; max-width: 400px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; text-align: left; }
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: #07112c; border-top: 2px solid var(--neon-blue); display: flex; justify-content: space-around; align-items: center; }
-        .nav-item { color: #8f9bb3; font-size: 12px; cursor: pointer; padding: 10px; flex: 1; }
-        .nav-item.active { color: var(--neon-blue); font-weight: bold; }
+        :root {
+            --bg-color: #050b1e;
+            --neon-blue: #00d2ff;
+            --neon-yellow: #ffd700;
+            --btn-yellow: #ffcc00;
+            --text-gray: #8f9bb3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 10px 10px;
+            flex-shrink: 0;
+        }
+        .assets-title {
+            font-size: 12px;
+            color: var(--text-gray);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .main-balance {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--neon-yellow);
+            margin: 5px 0;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        .sub-balances {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 11px;
+        }
+        .balance-chip {
+            background: rgba(255,255,255,0.05);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 210, 255, 0.2);
+        }
+        .balance-chip span {
+            color: var(--neon-yellow);
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+            padding-bottom: 90px;
+        }
+
+        /* Виправлено баг зі зсувом монети — тепер завжди ідеальний Flex по центру */
+        .page {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .tap-effect-zone {
+            position: relative;
+            margin: 30px 0;
+            touch-action: none;
+        }
+        .coin-btn {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffe866 0%, #ffc400 70%, #b38600 100%);
+            border: 8px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.6), inset 0 0 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #050b1e;
+            cursor: pointer;
+            transition: transform 0.05s;
+            touch-action: none;
+        }
+        .coin-btn:active {
+            transform: scale(0.95);
+        }
+        .action-btn {
+            width: 90%;
+            max-width: 340px;
+            background: var(--btn-yellow);
+            color: #000;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+        }
+        .action-btn:disabled {
+            background: #555;
+            color: #aaa;
+            box-shadow: none;
+        }
+
+        .floating-text {
+            position: absolute;
+            color: var(--neon-blue);
+            font-weight: bold;
+            font-size: 24px;
+            pointer-events: none;
+            animation: floatUp 0.6s ease-out forwards;
+            z-index: 50;
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(0.8); }
+        }
+
+        .list-container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(0,210,255,0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: left;
+        }
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .list-item:last-child { border: none; }
+        .go-btn {
+            background: var(--btn-yellow);
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            background: #07112c;
+            border-top: 2px solid var(--neon-blue);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-gray);
+            font-size: 11px;
+            text-decoration: none;
+            cursor: pointer;
+            flex: 1;
+            padding: 10px 0;
+        }
+        .nav-item span:first-child {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        .nav-item.active {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
     </style>
 </head>
 <body>
 
+    <!-- ПОВЕРНУЛИ КРАСИВУ ВЕРХНЮ ПАНЕЛЬ З БАЛАНСАМИ -->
     <div class="header">
-        <p style="color: #8f9bb3; font-size: 12px;">TOTAL BALANCE</p>
-        <div class="main-balance" id="balance-txt">0.0000 ZRV</div>
+        <div class="assets-title">Assets</div>
+        <div class="main-balance" id="total-balance">0.0000 ZRV</div>
+        <div class="sub-balances">
+            <div class="balance-chip">HOLDING: <span id="holding-balance">0.0000</span></div>
+            <div class="balance-chip">POOL: <span id="pool-balance">0.0000</span></div>
+        </div>
     </div>
 
     <div class="content">
-        <!-- Сторінка 1: Mine -->
-        <div id="p-mine" class="page active">
-            <div class="coin-btn" id="coin-element">ZRV</div>
-            <button class="action-btn" id="mine-btn">START MINING</button>
+        <!-- 1. MINE PAGE -->
+        <div id="page-mine" class="page active">
+            <div class="tap-effect-zone">
+                <div class="coin-btn" id="coin-target">ZRV</div>
+            </div>
+            <button class="action-btn" id="mining-btn">START MINING (8H)</button>
         </div>
 
-        <!-- Сторінка 2: Tasks -->
-        <div id="p-tasks" class="page">
+        <!-- 2. TASKS PAGE (Повернули кнопки Go) -->
+        <div id="page-tasks" class="page">
             <h2 style="margin-bottom: 15px;">Tasks</h2>
             <div class="list-container">
-                <p>YouTube Task (+10 ZRV)</p>
-                <p style="margin-top: 10px;">X Task (+5 ZRV)</p>
+                <div class="list-item">
+                    <div>YouTube Like & Comment<br><small style="color:var(--neon-yellow)">+10 ZRV</small></div>
+                    <button class="go-btn" id="task-yt-btn">Go</button>
+                </div>
+                <div class="list-item">
+                    <div>X Retweet<br><small style="color:var(--neon-yellow)">+5 ZRV</small></div>
+                    <button class="go-btn" id="task-x-btn">Go</button>
+                </div>
             </div>
         </div>
 
-        <!-- Сторінка 3: Miners -->
-        <div id="p-miners" class="page">
-            <h2>Miners</h2>
-            <p style="margin: 15px 0;" id="lvl-txt">Level 1 / 500</p>
-            <button class="action-btn" id="up-btn">Upgrade</button>
+        <!-- 3. MINERS PAGE (Повернули Upgrade) -->
+        <div id="page-miners" class="page">
+            <h2 style="margin-bottom: 10px;">Miners</h2>
+            <div style="font-size: 18px; color: var(--neon-blue); margin-bottom: 15px;" id="miner-level-txt">Level 1 / 500</div>
+            <button class="action-btn" id="upgrade-btn" style="width:200px;">Upgrade</button>
         </div>
 
-        <!-- Сторінка 4: Friends -->
-        <div id="p-friends" class="page">
-            <h2>Friends</h2>
-            <p style="margin-top: 15px;">Invite Link: https://t.me</p>
+        <!-- 4. FRIENDS PAGE -->
+        <div id="page-friends" class="page">
+            <h2 style="margin-bottom: 15px;">Invite Friends</h2>
+            <div class="list-container" style="text-align: center;">
+                <input type="text" id="ref-link" value="https://t.me" readonly style="width: 100%; padding: 10px; background: #000; border: 1px solid var(--neon-blue); color: #fff; text-align: center; border-radius: 8px; margin-bottom: 15px;">
+                <button class="action-btn" id="copy-btn">Copy Link</button>
+            </div>
         </div>
 
-        <!-- Сторінка 5: Profile -->
-        <div id="p-profile" class="page">
-            <h2>Profile</h2>
-            <p style="margin-top: 15px;">Status: Verified</p>
+        <!-- 5. PROFILE PAGE -->
+        <div id="page-profile" class="page">
+            <h2 style="margin-bottom: 20px;">User Profile</h2>
+            <div class="list-container">
+                <div class="list-item"><span>User ID:</span> <strong id="user-id">574839201</strong></div>
+                <div class="list-item"><span>Status:</span> <span style="color: #00ffcc; font-weight: bold;">Account Verification: Verified</span></div>
+            </div>
         </div>
     </div>
 
+    <!-- ПОВЕРНУЛИ ГАРНІ ЗНАЧКИ/ЕМОДЗІ В НАВІГАЦІЮ -->
     <div class="nav-bar">
-        <div class="nav-item active" id="n-mine">Mine</div>
-        <div class="nav-item" id="n-tasks">Tasks</div>
-        <div class="nav-item" id="n-miners">Miners</div>
-        <div class="nav-item" id="n-friends">Friends</div>
-        <div class="nav-item" id="n-profile">Profile</div>
+        <div class="nav-item active" id="nav-mine"><span>⛏️</span><span>Mine</span></div>
+        <div class="nav-item" id="nav-tasks"><span>📝</span><span>Tasks</span></div>
+        <div class="nav-item" id="nav-miners"><span>⚡</span><span>Miners</span></div>
+        <div class="nav-item" id="nav-friends"><span>👥</span><span>Friends</span></div>
+        <div class="nav-item" id="nav-profile"><span>👤</span><span>Profile</span></div>
     </div>
 
     <script>
-        // Ініціалізація Telegram WebApp
-        if (window.Telegram && window.Telegram.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
         }
 
-        var score = 0.0000;
-        var lvl = 1;
-
-        // Проста функція кліку по монеті
-        var clickZone = document.getElementById("coin-element");
-        if (clickZone) {
-            clickZone.onclick = function() {
-                score = score + 0.0001;
-                document.getElementById("balance-txt").innerText = score.toFixed(4) + " ZRV";
-            };
-        }
-
-        // Проста функція перемикання вкладок
-        function showPage(id) {
-            var pages = ["mine", "tasks", "miners", "friends", "profile"];
-            for (var i = 0; i < pages.length; i++) {
-                document.getElementById("p-" + pages[i]).style.display = "none";
-                document.getElementById("n-" + pages[i]).className = "nav-item";
-            }
-            document.getElementById("p-" + id).style.display = "block";
-            document.getElementById("n-" + id).className = "nav-item active";
-        }
-
-        document.getElementById("n-mine").onclick = function() { showPage("mine"); };
-        document.getElementById("n-tasks").onclick = function() { showPage("tasks"); };
-        document.getElementById("n-miners").onclick = function() { showPage("miners"); };
-        document.getElementById("n-friends").onclick = function() { showPage("friends"); };
-        document.getElementById("n-profile").onclick = function() { showPage("profile"); };
-
-        // Кнопка покращення
-        document.getElementById("up-btn").onclick = function() {
-            if (lvl < 500) {
-                lvl = lvl + 1;
-                document.getElementById("lvl-txt").innerText = "Level " + lvl + " / 500";
-            }
-        };
-    </script>
-</body>
-</html>
+        // Автоматичне відновлення даних з пам'яті телефону (Захист від обнулення)
+        
