@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZRV MINER PLATFORM</title>
+    <!-- ПІДКЛЮЧАЄМО ОФІЦІЙНИЙ СКРИПТ ТЕЛЕГРАМУ ДЛЯ ВЕБ-ДОДАТКІВ -->
+    <script src="https://telegram.org"></script>
     <style>
         :root {
             --bg-color: #050b1e;
@@ -20,6 +22,7 @@
             font-family: 'Arial', sans-serif;
             -webkit-user-select: none;
             user-select: none;
+            -webkit-touch-callout: none; /* Блокує виклик меню копіювання в Telegram */
         }
 
         body {
@@ -31,7 +34,6 @@
             overflow: hidden;
         }
 
-        /* Фіксована верхня панель балансу */
         .header {
             text-align: center;
             padding: 20px 10px 10px;
@@ -66,7 +68,6 @@
             color: var(--neon-yellow);
         }
 
-        /* Контейнер для сторінок */
         .content {
             flex: 1;
             display: flex;
@@ -91,10 +92,10 @@
             display: flex;
         }
 
-        /* Елементи вкладки MINE */
         .tap-effect-zone {
             position: relative;
             margin: 30px 0;
+            touch-action: none; /* Забороняє Telegram перетягувати екран під час тапу */
         }
         .coin-btn {
             width: 220px;
@@ -111,6 +112,7 @@
             color: #050b1e;
             cursor: pointer;
             transition: transform 0.05s;
+            touch-action: none;
         }
         .coin-btn:active {
             transform: scale(0.95);
@@ -136,7 +138,6 @@
             cursor: not-allowed;
         }
 
-        /* Спливаючі цифри при тапі */
         .floating-text {
             position: absolute;
             color: var(--neon-blue);
@@ -144,13 +145,13 @@
             font-size: 24px;
             pointer-events: none;
             animation: floatUp 0.6s ease-out forwards;
+            z-index: 50;
         }
         @keyframes floatUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
             100% { opacity: 0; transform: translateY(-100px) scale(0.8); }
         }
 
-        /* Шаблони для інших сторінок */
         .list-container {
             width: 100%;
             max-width: 400px;
@@ -178,7 +179,6 @@
             cursor: pointer;
         }
 
-        /* Нижня навігація (Menu) */
         .nav-bar {
             position: fixed;
             bottom: 0;
@@ -201,6 +201,7 @@
             text-decoration: none;
             cursor: pointer;
             flex: 1;
+            padding: 10px 0;
         }
         .nav-item span:first-child {
             font-size: 20px;
@@ -214,7 +215,6 @@
 </head>
 <body>
 
-    <!-- ВЕРХНЯ ПАНЕЛЬ З БАЛАНСОМ -->
     <div class="header">
         <div class="assets-title">Assets</div>
         <div class="main-balance" id="total-balance">0.0000 ZRV</div>
@@ -224,7 +224,6 @@
         </div>
     </div>
 
-    <!-- КОНТЕНТ СТОРІНОК -->
     <div class="content">
         
         <!-- 1. MINE PAGE -->
@@ -241,11 +240,11 @@
             <div class="list-container">
                 <div class="list-item">
                     <div>YouTube Like & Comment<br><small style="color:var(--neon-yellow)">+10 ZRV</small></div>
-                    <button class="go-btn" onclick="completeTask(10)">Go</button>
+                    <button class="go-btn" id="task1-btn">Go</button>
                 </div>
                 <div class="list-item">
                     <div>X Retweet<br><small style="color:var(--neon-yellow)">+5 ZRV</small></div>
-                    <button class="go-btn" onclick="completeTask(5)">Go</button>
+                    <button class="go-btn" id="task2-btn">Go</button>
                 </div>
             </div>
         </div>
@@ -262,7 +261,7 @@
             <h2 style="margin-bottom: 15px;">Invite Friends</h2>
             <div class="list-container" style="text-align: center;">
                 <input type="text" id="ref-link" value="https://t.me" readonly style="width: 100%; padding: 10px; background: #000; border: 1px solid var(--neon-blue); color: #fff; text-align: center; border-radius: 8px; margin-bottom: 15px;">
-                <button class="action-btn" onclick="copyLink()">Copy Link</button>
+                <button class="action-btn" id="copy-btn">Copy Link</button>
             </div>
         </div>
 
@@ -277,22 +276,22 @@
 
     </div>
 
-    <!-- НИЖНЯ НАВІГАЦІЙНА ПАНЕЛЬ -->
     <div class="nav-bar">
-        <div class="nav-item active" onclick="switchPage('mine', this)"><span>⛏️</span><span>Mine</span></div>
-        <div class="nav-item" onclick="switchPage('tasks', this)"><span>📝</span><span>Tasks</span></div>
-        <div class="nav-item" onclick="switchPage('miners', this)"><span>⚡</span><span>Miners</span></div>
-        <div class="nav-item" onclick="switchPage('friends', this)"><span>👥</span><span>Friends</span></div>
-        <div class="nav-item" onclick="switchPage('profile', this)"><span>👤</span><span>Profile</span></div>
+        <div class="nav-item active" data-page="mine"><span>⛏️</span><span>Mine</span></div>
+        <div class="nav-item" data-page="tasks"><span>📝</span><span>Tasks</span></div>
+        <div class="nav-item" data-page="miners"><span>⚡</span><span>Miners</span></div>
+        <div class="nav-item" data-page="friends"><span>👥</span><span>Friends</span></div>
+        <div class="nav-item" data-page="profile"><span>👤</span><span>Profile</span></div>
     </div>
 
-    <!-- ЛОГІКА ДОДАТКУ (JAVASCRIPT) -->
     <script>
+        // Повідомляємо Telegram WebApp, що додаток готовий до роботи
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand(); // Розгортає додаток на весь екран мобільного
+        }
+
         let balance = 0.0000;
         let holding = 0.0000;
         let pool = 0.0000;
-        let minerLevel = 1;
-        let miningTimer = null;
-        let isMining = false;
-
-        
