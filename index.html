@@ -15,41 +15,190 @@
             font-family: 'Segoe UI', Roboto, sans-serif;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             height: 100vh;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
+            box-sizing: border-box;
         }
 
-        .header-panel { text-align: center; padding: 20px 15px 10px 15px; }
-        .assets-label { font-size: 11px; color: #6a7b95; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
-        .main-balance { font-size: 34px; font-weight: 800; color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); margin: 4px 0; }
-        .sub-wallet { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 132, 255, 0.15); border-radius: 20px; padding: 6px 14px; display: inline-block; font-size: 12px; color: #8da2c0; margin: 3px 0; }
+        .header-panel {
+            text-align: center;
+            padding: 15px 15px 5px 15px;
+            flex-shrink: 0;
+        }
+        .assets-label {
+            font-size: 11px;
+            color: #6a7b95;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .main-balance {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            margin: 4px 0;
+        }
+        .sub-wallet {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 132, 255, 0.2);
+            border-radius: 20px;
+            padding: 5px 12px;
+            display: inline-block;
+            font-size: 11px;
+            color: #8da2c0;
+            margin: 2px 4px;
+        }
         .sub-wallet span { color: #ffd700; font-weight: bold; }
-        .pool-indicator { font-size: 24px; font-weight: bold; color: #00e5ff; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4); margin: 10px 0; }
+        
+        .pool-indicator {
+            font-size: 22px;
+            font-weight: bold;
+            color: #00e5ff;
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+            margin: 5px 0;
+        }
 
-        .app-screen { display: none; flex-direction: column; align-items: center; flex-grow: 1; padding: 10px 20px; width: 100%; box-sizing: border-box; overflow-y: auto; }
+        .content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: calc(100vh - 210px);
+            box-sizing: border-box;
+            padding-bottom: 70px;
+        }
+
+        .app-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
         .app-screen.active { display: flex; }
 
-        .coin-stage { position: relative; display: flex; align-items: center; justify-content: center; margin: auto 0; }
-        .coin-zrv { width: 210px; height: 210px; background: radial-gradient(circle, #ffd700 0%, #b8860b 100%); border-radius: 50%; border: 6px solid #0084ff; box-shadow: 0 0 40px rgba(0, 132, 255, 0.4), inset 0 0 25px rgba(255, 255, 255, 0.5); display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 900; color: #111a2e; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); cursor: pointer; transition: transform 0.05s ease; }
+        .coin-stage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto 0;
+            padding: 15px 0;
+        }
+        .coin-zrv {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #ffd700 0%, #b8860b 100%);
+            border-radius: 50%;
+            border: 5px solid #0084ff;
+            box-shadow: 0 0 35px rgba(0, 132, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            font-weight: 900;
+            color: #111a2e;
+            cursor: pointer;
+            transition: transform 0.05s ease;
+        }
         .coin-zrv:active { transform: scale(0.96); }
 
-        .big-yellow-btn { width: 100%; max-width: 340px; background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%); color: #050609; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 20px rgba(255, 170, 0, 0.25); margin-bottom: 15px; }
+        .big-yellow-btn {
+            width: 100%;
+            max-width: 340px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+            color: #050609;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 170, 0, 0.25);
+            margin-bottom: 5px;
+            flex-shrink: 0;
+        }
 
-        .item-box { width: 100%; max-width: 340px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .item-box { 
+            width: 100%; 
+            max-width: 340px; 
+            background: rgba(255, 255, 255, 0.04); 
+            border: 1px solid rgba(255, 255, 255, 0.06); 
+            border-radius: 14px; 
+            padding: 14px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-sizing: border-box; 
+        }
         .item-details h4 { margin: 0; font-size: 14px; color: #ffffff; }
         .item-details p { margin: 4px 0 0 0; font-size: 11px; color: #6a7b95; }
-        .yellow-go-btn { background: #ffd700; color: #050609; border: none; padding: 8px 20px; border-radius: 18px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        
+        .yellow-go-btn { 
+            background: #ffd700; 
+            color: #050609; 
+            border: none; 
+            padding: 8px 20px; 
+            border-radius: 18px; 
+            font-size: 12px; 
+            font-weight: 700; 
+            cursor: pointer; 
+        }
 
-        .chart-mock { width: 100%; max-width: 340px; background: rgba(0, 132, 255, 0.05); border: 1px solid rgba(0, 132, 255, 0.15); border-radius: 14px; padding: 15px; margin-bottom: 15px; box-sizing: border-box; }
+        .chart-mock { 
+            width: 100%; 
+            max-width: 340px; 
+            background: rgba(0, 132, 255, 0.05); 
+            border: 1px solid rgba(0, 132, 255, 0.15); 
+            border-radius: 14px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            box-sizing: border-box; 
+            text-align: left;
+        }
         .chart-title { font-size: 12px; color: #00e5ff; font-weight: bold; margin-bottom: 5px; }
 
-        .bottom-nav { background: rgba(9, 10, 15, 0.95); border-top: 1px solid rgba(0, 132, 255, 0.2); display: flex; justify-content: space-around; padding: 12px 0 16px 0; backdrop-filter: blur(10px); }
-        .nav-tab { color: #53647c; font-size: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; text-align: center; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .nav-tab.active { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
-        .nav-tab .icon-dot { width: 4px; height: 4px; background: transparent; border-radius: 50%; }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            background: #090a0f;
+            border-top: 1px solid rgba(0, 132, 255, 0.3);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            z-index: 9999;
+            box-sizing: border-box;
+        }
+        .nav-tab {
+            color: #53647c;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 20%;
+        }
+        .nav-tab.active {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+        .nav-tab .icon-dot { width: 4px; height: 4px; background: transparent; border-radius: 50%; margin-top: 3px; }
         .nav-tab.active .icon-dot { background: #0084ff; box-shadow: 0 0 8px #0084ff; }
     </style>
 </head>
@@ -58,115 +207,75 @@
     <div class="header-panel">
         <div class="assets-label">ASSETS</div>
         <div id="mainBal" class="main-balance">0.0000 ZRV</div>
-        <div class="sub-wallet">HOLDING WALLET: <span id="holdBal">0.0000</span> ZRV</div>
-        <div class="sub-wallet">POOL WALLET: <span id="poolBal">0.0000</span> ZRV</div>
+        <div>
+            <div class="sub-wallet">HOLDING WALLET: <span id="holdBal">0.0000</span></div>
+            <div class="sub-wallet">POOL WALLET: <span id="poolBal">0.0000</span></div>
+        </div>
         <div id="liveGain" class="pool-indicator">+0.0000</div>
     </div>
 
-    <!-- MINE -->
-    <div id="screen-mine" class="app-screen active">
-        <div class="coin-stage">
-            <div id="zrvCoin" class="coin-zrv">ZRV</div>
-        </div>
-        <button id="actionBtn" class="big-yellow-btn">CLAIM</button>
-    </div>
-
-    <!-- TASKS -->
-    <div id="screen-tasks" class="app-screen">
-        <h3 style="align-self: flex-start; margin: 5px 0 15px 0; font-size: 18px;">Earn Rewards</h3>
-        <div class="item-box">
-            <div class="item-details"><h4>YouTube Like & Comment</h4><p>+10.0000 ZRV</p></div>
-            <button class="yellow-go-btn" onclick="doTask(10)">Go</button>
-        </div>
-        <div class="item-box">
-            <div class="item-details"><h4>X (Twitter) Retweet</h4><p>+5.0000 ZRV</p></div>
-            <button class="yellow-go-btn" onclick="doTask(5)">Go</button>
-        </div>
-    </div>
-
-    <!-- MINERS (500 РІВНІВ) -->
-    <div id="screen-miners" class="app-screen">
-        <div class="chart-mock">
-            <div class="chart-title">MY LEVEL JOURNEY</div>
-            <div id="levelDisplay" style="font-size: 14px; font-weight: bold; color: #fff;">Level 1 / 500</div>
-            <div id="speedDisplay" style="font-size: 11px; color:#6a7b95; margin-top:4px;">Speed: 1.00 TH/s</div>
-        </div>
-        <div id="upgradeBox" class="item-box" style="border: 1px solid #ffd700;">
-            <div class="item-details">
-                <h4 id="upgradeTitle">Upgrade Miner</h4>
-                <p id="upgradeCostText">Cost: 50 ZRV • +0.05 TH/s</p>
+    <div class="content-area">
+        
+        <!-- ЕКРАН 1: MINE -->
+        <div id="screen-mine" class="app-screen active">
+            <div class="coin-stage">
+                <div id="zrvCoin" class="coin-zrv">ZRV</div>
             </div>
-            <button id="upgradeBtn" class="yellow-go-btn" style="background:#00e5ff;">UPGRADE</button>
+            <button id="actionBtn" class="big-yellow-btn">START MINING (8H)</button>
         </div>
-    </div>
 
-    <!-- FRIENDS -->
-    <div id="screen-friends" class="app-screen">
-        <h3 style="align-self: flex-start; margin: 5px 0 10px 0; font-size: 18px;">Friends</h3>
-        <div class="item-box" style="background: rgba(0, 132, 255, 0.05);">
-            <div class="item-details" style="width: 70%;">
-                <h4>Your Invite Link</h4>
-                <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">https://t.me</p>
+        <!-- ЕКРАН 2: TASKS -->
+        <div id="screen-tasks" class="app-screen">
+            <h3 style="align-self: flex-start; margin: 5px 0 15px 0; font-size: 18px;">Earn Rewards</h3>
+            <div class="item-box">
+                <div class="item-details"><h4>YouTube Like & Comment</h4><p>+10.0000 ZRV</p></div>
+                <button class="yellow-go-btn" onclick="doTask(10)">Go</button>
             </div>
-            <button class="yellow-go-btn" onclick="copyLink()">Copy</button>
+            <div class="item-box">
+                <div class="item-details"><h4>X (Twitter) Retweet</h4><p>+5.0000 ZRV</p></div>
+                <button class="yellow-go-btn" onclick="doTask(5)">Go</button>
+            </div>
         </div>
-    </div>
 
-    <!-- PROFILE -->
-    <div id="screen-profile" class="app-screen">
-        <div class="item-box">
-            <div class="item-details"><h4>User ID</h4><p id="profId">Loading...</p></div>
+        <!-- ЕКРАН 3: MINERS -->
+        <div id="screen-miners" class="app-screen">
+            <div class="chart-mock">
+                <div class="chart-title">MY LEVEL JOURNEY</div>
+                <div id="levelDisplay" style="font-size: 14px; font-weight: bold; color: #fff;">Level 1 / 500</div>
+                <div id="speedDisplay" style="font-size: 11px; color:#6a7b95; margin-top:4px;">Speed: 1.00 TH/s</div>
+            </div>
+            <div id="upgradeBox" class="item-box" style="border: 1px solid #ffd700;">
+                <div class="item-details">
+                    <h4>Upgrade Miner</h4>
+                    <p id="upgradeCostText">Cost: 50 ZRV • +0.05 TH/s</p>
+                </div>
+                <button id="upgradeBtn" class="yellow-go-btn" style="background:#00e5ff;">UPGRADE</button>
+            </div>
         </div>
-        <div class="item-box">
-            <div class="item-details"><h4>Account Verification</h4><p style="color:#ffd700;">Verified</p></div>
+
+        <!-- ЕКРАН 4: FRIENDS -->
+        <div id="screen-friends" class="app-screen">
+            <h3 style="align-self: flex-start; margin: 5px 0 10px 0; font-size: 18px;">Friends</h3>
+            <div class="item-box" style="background: rgba(0, 132, 255, 0.05);">
+                <div class="item-details" style="width: 70%;">
+                    <h4>Your Invite Link</h4>
+                    <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">https://t.me</p>
+                </div>
+                <button class="yellow-go-btn" onclick="copyLink()">Copy</button>
+            </div>
+        </div>
+
+        <!-- ЕКРАН 5: PROFILE -->
+        <div id="screen-profile" class="app-screen">
+            <div class="item-box">
+                <div class="item-details"><h4>User ID</h4><p id="profId">Loading...</p></div>
+            </div>
+            <div class="item-box">
+                <div class="item-details"><h4>Account Verification</h4><p style="color:#ffd700;">Verified</p></div>
+            </div>
         </div>
     </div>
 
     <div class="bottom-nav">
         <div class="nav-tab active" onclick="changeTab('mine')"><span>⛏️ Mine</span><div class="icon-dot"></div></div>
-        <div class="nav-tab" onclick="changeTab('tasks')"><span>📝 Tasks</span><div class="icon-dot"></div></div>
-        <div class="nav-tab" onclick="changeTab('miners')"><span>⚡ Miners</span><div class="icon-dot"></div></div>
-        <div class="nav-tab" onclick="changeTab('friends')"><span>👥 Friends</span><div class="icon-dot"></div></div>
-        <div class="nav-tab" onclick="changeTab('profile')"><span>👤 Profile</span><div class="icon-dot"></div></div>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        let uId = urlParams.get('user_id') || "000000";
-        let dbBalance = parseFloat(urlParams.get('balance')) || 0.0;
-        let miningEndTime = parseInt(urlParams.get('mining_end')) || 0;
-        let currentLevel = parseInt(urlParams.get('level')) || 1;
-
-        document.getElementById('profId').textContent = uId;
-
-        let accumulatedSession = 0.0;
-        let activeInterval;
-
-        // Математичний розрахунок для 500 рівнів
-        function getUpgradeCost(lvl) { return Math.floor(50 * Math.pow(1.12, lvl - 1)); }
-        function getMiningSpeed(lvl) { return 1.0 + (lvl - 1) * 0.05; }
-
-        function refreshCounters() {
-            let total = dbBalance + accumulatedSession;
-            document.getElementById('mainBal').textContent = total.toFixed(4) + " ZRV";
-            document.getElementById('holdBal').textContent = (total * 0.9).toFixed(4);
-            document.getElementById('poolBal').textContent = (total * 0.1).toFixed(4);
-            
-            // Оновлення вкладки Miners
-            document.getElementById('levelDisplay').textContent = `Level ${currentLevel} / 500`;
-            document.getElementById('speedDisplay').textContent = `Speed: ${getMiningSpeed(currentLevel).toFixed(2)} TH/s`;
-            
-            if (currentLevel >= 500) {
-                document.getElementById('upgradeCostText').textContent = "MAX LEVEL REACHED";
-                document.getElementById('upgradeBtn').style.display = "none";
-            } else {
-                document.getElementById('upgradeCostText').textContent = `Cost: ${getUpgradeCost(currentLevel)} ZRV • +0.05 TH/s`;
-            }
-        }
-
-        function changeTab(name) {
         
