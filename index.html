@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ZRV MINER PLATFORM</title>
-    <!-- Офіційний скрипт Telegram WebApp SDK -->
+    <!-- ЦЕЙ СКРИПТ ОБОВ'ЯЗКОВИЙ ДЛЯ ТОГО, ЩОБ TELEGRAM ДОЗВОЛИВ НАЖИМАТИ КНОПКИ -->
     <script src="https://telegram.org"></script>
     <style>
         :root {
@@ -283,11 +283,11 @@
     </div>
 
     <script>
-        // Ініціалізація Telegram SDK
+        // Ініціалізація Telegram
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
-            tg.expand();
+            tg.expand(); // Розгортаємо гру на весь екран
         }
 
         let balance = 0.0000;
@@ -298,4 +298,4 @@
         let isMining = false;
 
         function updateUI() {
-            const elTotal = document.getElementById('total-balance');
+        
