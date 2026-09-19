@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>ZRV Miner v2</title>
+    <title>ZRV Miner Platform</title>
     <script src="https://telegram.org"></script>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle, #1e1e2f 0%, #0f0f1a 100%);
+            background: #090a0f;
+            background-image: radial-gradient(circle at 50% 30%, #111a2e 0%, #050609 100%);
             color: #ffffff;
             font-family: 'Segoe UI', Roboto, sans-serif;
             display: flex;
@@ -21,179 +22,112 @@
             -webkit-user-select: none;
         }
 
-        /* Шапка з балансом */
-        .header {
-            text-align: center;
-            padding-top: 30px;
-        }
-        .balance-label {
-            font-size: 14px;
-            color: #8a8ab0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .balance-value {
-            font-size: 42px;
-            font-weight: bold;
-            color: #00ffcc;
-            text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
-            margin-top: 5px;
-        }
+        .header-panel { text-align: center; padding: 20px 15px 10px 15px; }
+        .assets-label { font-size: 11px; color: #6a7b95; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .main-balance { font-size: 34px; font-weight: 800; color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); margin: 4px 0; }
+        .sub-wallet { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 132, 255, 0.15); border-radius: 20px; padding: 6px 14px; display: inline-block; font-size: 12px; color: #8da2c0; margin: 3px 0; }
+        .sub-wallet span { color: #ffd700; font-weight: bold; }
+        .pool-indicator { font-size: 24px; font-weight: bold; color: #00e5ff; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4); margin: 10px 0; }
 
-        /* Контентні зони (вкладки) */
-        .tab-content {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            padding: 20px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .tab-content.active {
-            display: flex;
-        }
+        .app-screen { display: none; flex-direction: column; align-items: center; flex-grow: 1; padding: 10px 20px; width: 100%; box-sizing: border-box; overflow-y: auto; }
+        .app-screen.active { display: flex; }
 
-        /* Велика кнопка майнінгу */
-        .mining-btn {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(135deg, #00ffcc 0%, #0088cc 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 35px rgba(0, 255, 204, 0.4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.1s ease;
-            text-align: center;
-        }
-        .mining-btn:active {
-            transform: scale(0.96);
-        }
-        .mining-btn .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #fff;
-        }
-        .mining-btn .status {
-            font-size: 14px;
-            margin-top: 8px;
-            color: #e0e0ff;
-        }
+        .coin-stage { position: relative; display: flex; align-items: center; justify-content: center; margin: auto 0; }
+        .coin-zrv { width: 210px; height: 210px; background: radial-gradient(circle, #ffd700 0%, #b8860b 100%); border-radius: 50%; border: 6px solid #0084ff; box-shadow: 0 0 40px rgba(0, 132, 255, 0.4), inset 0 0 25px rgba(255, 255, 255, 0.5); display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 900; color: #111a2e; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); cursor: pointer; transition: transform 0.05s ease; }
+        .coin-zrv:active { transform: scale(0.96); }
 
-        /* Списки для Бустів та Друзів */
-        .card-list {
-            width: 100%;
-            max-width: 320px;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .card-info h4 {
-            margin: 0;
-            font-size: 16px;
-            color: #fff;
-        }
-        .card-info p {
-            margin: 4px 0 0 0;
-            font-size: 12px;
-            color: #8a8ab0;
-        }
-        .btn-action {
-            background: #00ffcc;
-            color: #0f0f1a;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        .big-yellow-btn { width: 100%; max-width: 340px; background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%); color: #050609; border: none; padding: 16px; border-radius: 14px; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 20px rgba(255, 170, 0, 0.25); margin-bottom: 15px; }
 
-        /* Нижня панель навігації (Таббар) */
-        .nav-bar {
-            background: rgba(15, 15, 26, 0.8);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            backdrop-filter: blur(10px);
-        }
-        .nav-item {
-            color: #8a8ab0;
-            font-size: 12px;
-            text-transform: uppercase;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            flex-grow: 1;
-        }
-        .nav-item.active {
-            color: #00ffcc;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
-        }
+        .item-box { width: 100%; max-width: 340px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .item-details h4 { margin: 0; font-size: 14px; color: #ffffff; }
+        .item-details p { margin: 4px 0 0 0; font-size: 11px; color: #6a7b95; }
+        .yellow-go-btn { background: #ffd700; color: #050609; border: none; padding: 8px 20px; border-radius: 18px; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+        .chart-mock { width: 100%; max-width: 340px; background: rgba(0, 132, 255, 0.05); border: 1px solid rgba(0, 132, 255, 0.15); border-radius: 14px; padding: 15px; margin-bottom: 15px; box-sizing: border-box; }
+        .chart-title { font-size: 12px; color: #00e5ff; font-weight: bold; margin-bottom: 5px; }
+
+        .bottom-nav { background: rgba(9, 10, 15, 0.95); border-top: 1px solid rgba(0, 132, 255, 0.2); display: flex; justify-content: space-around; padding: 12px 0 16px 0; backdrop-filter: blur(10px); }
+        .nav-tab { color: #53647c; font-size: 10px; font-weight: 700; text-transform: uppercase; cursor: pointer; text-align: center; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-tab.active { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+        .nav-tab .icon-dot { width: 4px; height: 4px; background: transparent; border-radius: 50%; }
+        .nav-tab.active .icon-dot { background: #0084ff; box-shadow: 0 0 8px #0084ff; }
     </style>
 </head>
 <body>
 
-    <!-- Загальна шапка з балансом -->
-    <div class="header">
-        <div class="balance-label">Баланс ZRV</div>
-        <div id="totalBalance" class="balance-value">0</div>
+    <div class="header-panel">
+        <div class="assets-label">ASSETS</div>
+        <div id="mainBal" class="main-balance">0.0000 ZRV</div>
+        <div class="sub-wallet">HOLDING WALLET: <span id="holdBal">0.0000</span> ZRV</div>
+        <div class="sub-wallet">POOL WALLET: <span id="poolBal">0.0000</span> ZRV</div>
+        <div id="liveGain" class="pool-indicator">+0.0000</div>
     </div>
 
-    <!-- ВКЛАДКА 1: МАЙНІНГ -->
-    <div id="tab-mining" class="tab-content active">
-        <div id="startMiningBtn" class="mining-btn">
-            <div id="btnTitle" class="title">СТАРТ</div>
-            <div id="btnTimer" class="status">Майнінг 8 годин</div>
+    <!-- MINE -->
+    <div id="screen-mine" class="app-screen active">
+        <div class="coin-stage">
+            <div id="zrvCoin" class="coin-zrv">ZRV</div>
+        </div>
+        <button id="actionBtn" class="big-yellow-btn">CLAIM</button>
+    </div>
+
+    <!-- TASKS -->
+    <div id="screen-tasks" class="app-screen">
+        <h3 style="align-self: flex-start; margin: 5px 0 15px 0; font-size: 18px;">Earn Rewards</h3>
+        <div class="item-box">
+            <div class="item-details"><h4>YouTube Like & Comment</h4><p>+10.0000 ZRV</p></div>
+            <button class="yellow-go-btn" onclick="doTask(10)">Go</button>
+        </div>
+        <div class="item-box">
+            <div class="item-details"><h4>X (Twitter) Retweet</h4><p>+5.0000 ZRV</p></div>
+            <button class="yellow-go-btn" onclick="doTask(5)">Go</button>
         </div>
     </div>
 
-    <!-- ВКЛАДКА 2: БУСТИ -->
-    <div id="tab-boosts" class="tab-content">
-        <h3>Доступні Покращення</h3>
-        <div class="card-list">
-            <div class="card">
-                <div class="card-info">
-                    <h4>Швидкість х2</h4>
-                    <p>Ціна: 500 ZRV</p>
-                </div>
-                <button class="btn-action">Купити</button>
+    <!-- MINERS (500 РІВНІВ) -->
+    <div id="screen-miners" class="app-screen">
+        <div class="chart-mock">
+            <div class="chart-title">MY LEVEL JOURNEY</div>
+            <div id="levelDisplay" style="font-size: 14px; font-weight: bold; color: #fff;">Level 1 / 500</div>
+            <div id="speedDisplay" style="font-size: 11px; color:#6a7b95; margin-top:4px;">Speed: 1.00 TH/s</div>
+        </div>
+        <div id="upgradeBox" class="item-box" style="border: 1px solid #ffd700;">
+            <div class="item-details">
+                <h4 id="upgradeTitle">Upgrade Miner</h4>
+                <p id="upgradeCostText">Cost: 50 ZRV • +0.05 TH/s</p>
             </div>
-            <div class="card">
-                <div class="card-info">
-                    <h4>Супер Майнер</h4>
-                    <p>Ціна: 2000 ZRV</p>
-                </div>
-                <button class="btn-action">Купити</button>
+            <button id="upgradeBtn" class="yellow-go-btn" style="background:#00e5ff;">UPGRADE</button>
+        </div>
+    </div>
+
+    <!-- FRIENDS -->
+    <div id="screen-friends" class="app-screen">
+        <h3 style="align-self: flex-start; margin: 5px 0 10px 0; font-size: 18px;">Friends</h3>
+        <div class="item-box" style="background: rgba(0, 132, 255, 0.05);">
+            <div class="item-details" style="width: 70%;">
+                <h4>Your Invite Link</h4>
+                <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">https://t.me</p>
             </div>
+            <button class="yellow-go-btn" onclick="copyLink()">Copy</button>
         </div>
     </div>
 
-    <!-- ВКЛАДКА 3: ДРУЗІ -->
-    <div id="tab-friends" class="tab-content">
-        <h3>Запросити друзів</h3>
-        <p style="color: #8a8ab0; text-align: center; font-size: 14px;">Отримуйте +10% від майнінгу ваших друзів!</p>
-        <div class="card-list" style="margin-top: 15px;">
-            <button class="btn-action" style="width: 100%; padding: 12px;" onclick="shareLink()">🔗 Скопіювати посилання</button>
+    <!-- PROFILE -->
+    <div id="screen-profile" class="app-screen">
+        <div class="item-box">
+            <div class="item-details"><h4>User ID</h4><p id="profId">Loading...</p></div>
+        </div>
+        <div class="item-box">
+            <div class="item-details"><h4>Account Verification</h4><p style="color:#ffd700;">Verified</p></div>
         </div>
     </div>
 
-    <!-- Нижня навігація (Кнопки меню) -->
-    <div class="nav-bar">
-        <div class="nav-item active" onclick="switchTab('mining')">⛏️ Майнінг</div>
-        <div class="nav-item" onclick="switchTab('boosts')">⚡ Бусти</div>
-        <div class="nav-item" onclick="switchTab('friends')">👥 Друзі</div>
+    <div class="bottom-nav">
+        <div class="nav-tab active" onclick="changeTab('mine')"><span>⛏️ Mine</span><div class="icon-dot"></div></div>
+        <div class="nav-tab" onclick="changeTab('tasks')"><span>📝 Tasks</span><div class="icon-dot"></div></div>
+        <div class="nav-tab" onclick="changeTab('miners')"><span>⚡ Miners</span><div class="icon-dot"></div></div>
+        <div class="nav-tab" onclick="changeTab('friends')"><span>👥 Friends</span><div class="icon-dot"></div></div>
+        <div class="nav-tab" onclick="changeTab('profile')"><span>👤 Profile</span><div class="icon-dot"></div></div>
     </div>
 
     <script>
@@ -202,82 +136,37 @@
         tg.ready();
 
         const urlParams = new URLSearchParams(window.location.search);
-        let currentBalance = parseInt(urlParams.get('balance')) || 0;
-        let miningEndTime = parseInt(urlParams.get('mining_end')) || 0; 
-        
-        const totalBalanceEl = document.getElementById('totalBalance');
-        const startBtn = document.getElementById('startMiningBtn');
-        const btnTitle = document.getElementById('btnTitle');
-        const btnTimer = document.getElementById('btnTimer');
+        let uId = urlParams.get('user_id') || "000000";
+        let dbBalance = parseFloat(urlParams.get('balance')) || 0.0;
+        let miningEndTime = parseInt(urlParams.get('mining_end')) || 0;
+        let currentLevel = parseInt(urlParams.get('level')) || 1;
 
-        totalBalanceEl.textContent = currentBalance;
-        let timerInterval;
+        document.getElementById('profId').textContent = uId;
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        let accumulatedSession = 0.0;
+        let activeInterval;
+
+        // Математичний розрахунок для 500 рівнів
+        function getUpgradeCost(lvl) { return Math.floor(50 * Math.pow(1.12, lvl - 1)); }
+        function getMiningSpeed(lvl) { return 1.0 + (lvl - 1) * 0.05; }
+
+        function refreshCounters() {
+            let total = dbBalance + accumulatedSession;
+            document.getElementById('mainBal').textContent = total.toFixed(4) + " ZRV";
+            document.getElementById('holdBal').textContent = (total * 0.9).toFixed(4);
+            document.getElementById('poolBal').textContent = (total * 0.1).toFixed(4);
             
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        function checkMiningStatus() {
-            const now = Math.floor(Date.now() / 1000);
+            // Оновлення вкладки Miners
+            document.getElementById('levelDisplay').textContent = `Level ${currentLevel} / 500`;
+            document.getElementById('speedDisplay').textContent = `Speed: ${getMiningSpeed(currentLevel).toFixed(2)} TH/s`;
             
-            if (miningEndTime > 0 && now < miningEndTime) {
-                startBtn.style.background = "linear-gradient(135deg, #555 0%, #222 100%)";
-                startBtn.style.pointerEvents = "none";
-                updateTimer();
-                timerInterval = setInterval(updateTimer, 1000);
-            } else if (miningEndTime > 0 && now >= miningEndTime) {
-                btnTitle.textContent = "CLAIM";
-                btnTimer.textContent = "+100 ZRV готово";
-                startBtn.style.background = "linear-gradient(135deg, #ffcc00 0%, #ff6600 100%)";
-                startBtn.style.pointerEvents = "auto";
+            if (currentLevel >= 500) {
+                document.getElementById('upgradeCostText').textContent = "MAX LEVEL REACHED";
+                document.getElementById('upgradeBtn').style.display = "none";
             } else {
-                btnTitle.textContent = "СТАРТ";
-                btnTimer.textContent = "Майнінг 8 годин";
-                startBtn.style.background = "linear-gradient(135deg, #00ffcc 0%, #0088cc 100%)";
-                startBtn.style.pointerEvents = "auto";
+                document.getElementById('upgradeCostText').textContent = `Cost: ${getUpgradeCost(currentLevel)} ZRV • +0.05 TH/s`;
             }
         }
 
-        function updateTimer() {
-            const now = Math.floor(Date.now() / 1000);
-            const timeLeft = miningEndTime - now;
-            
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                checkMiningStatus();
-                return;
-            }
-
-            const hrs = Math.floor(timeLeft / 3600).toString().padStart(2, '0');
-            const mins = Math.floor((timeLeft % 3600) / 60).toString().padStart(2, '0');
-            const secs = (timeLeft % 60).toString().padStart(2, '0');
-            
-            btnTitle.textContent = `${hrs}:${mins}:${secs}`;
-            btnTimer.textContent = "Майнінг активний";
-        }
-
-        startBtn.addEventListener('click', () => {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-            if (btnTitle.textContent === "СТАРТ") {
-                tg.sendData(JSON.stringify({ action: "start_mining" }));
-                tg.close(); 
-            } else if (btnTitle.textContent === "CLAIM") {
-                tg.sendData(JSON.stringify({ action: "claim_mining" }));
-                tg.close();
-            }
-        });
-
-        function shareLink() {
-            if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-            alert("Посилання скопійовано! Надішліть його другу.");
-        }
-
-        checkMiningStatus();
-    </script>
-</body>
-</html>
+        function changeTab(name) {
+        
