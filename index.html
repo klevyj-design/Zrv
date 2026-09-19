@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ZRV Miner Platform</title>
     <script src="https://telegram.org"></script>
     <style>
@@ -22,53 +22,59 @@
             box-sizing: border-box;
         }
 
+        /* Ультра-компактна шапка */
         .header-panel {
             text-align: center;
-            padding: 15px 15px 5px 15px;
+            padding: 10px 10px 2px 10px;
             flex-shrink: 0;
         }
         .assets-label {
-            font-size: 11px;
+            font-size: 10px;
             color: #6a7b95;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             font-weight: 600;
         }
         .main-balance {
-            font-size: 32px;
+            font-size: 26px;
             font-weight: 800;
             color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            margin: 4px 0;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            margin: 2px 0;
+        }
+        .wallets-row {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin: 2px 0;
         }
         .sub-wallet {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(0, 132, 255, 0.2);
-            border-radius: 20px;
-            padding: 5px 12px;
-            display: inline-block;
-            font-size: 11px;
+            border-radius: 12px;
+            padding: 3px 8px;
+            font-size: 10px;
             color: #8da2c0;
-            margin: 2px 4px;
         }
         .sub-wallet span { color: #ffd700; font-weight: bold; }
         
         .pool-indicator {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: bold;
             color: #00e5ff;
-            text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
-            margin: 5px 0;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+            margin: 2px 0;
         }
 
+        /* Область контенту */
         .content-area {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: calc(100vh - 210px);
+            height: calc(100vh - 180px);
             box-sizing: border-box;
-            padding-bottom: 70px;
+            padding-bottom: 75px; /* Захисний відступ */
         }
 
         .app-screen {
@@ -77,30 +83,31 @@
             align-items: center;
             width: 100%;
             height: 100%;
-            padding: 10px 20px;
+            padding: 5px 15px;
             box-sizing: border-box;
             overflow-y: auto;
         }
         .app-screen.active { display: flex; }
 
+        /* Оптимальний розмір монети для всіх екранів */
         .coin-stage {
             display: flex;
             align-items: center;
             justify-content: center;
             margin: auto 0;
-            padding: 15px 0;
+            padding: 5px 0;
         }
         .coin-zrv {
-            width: 180px;
-            height: 180px;
+            width: 150px;
+            height: 150px;
             background: radial-gradient(circle, #ffd700 0%, #b8860b 100%);
             border-radius: 50%;
-            border: 5px solid #0084ff;
-            box-shadow: 0 0 35px rgba(0, 132, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.5);
+            border: 4px solid #0084ff;
+            box-shadow: 0 0 25px rgba(0, 132, 255, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 44px;
+            font-size: 36px;
             font-weight: 900;
             color: #111a2e;
             cursor: pointer;
@@ -110,79 +117,50 @@
 
         .big-yellow-btn {
             width: 100%;
-            max-width: 340px;
+            max-width: 320px;
             background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
             color: #050609;
             border: none;
-            padding: 15px;
+            padding: 12px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 170, 0, 0.25);
+            box-shadow: 0 4px 12px rgba(255, 170, 0, 0.2);
             margin-bottom: 5px;
             flex-shrink: 0;
         }
 
-        .item-box { 
-            width: 100%; 
-            max-width: 340px; 
-            background: rgba(255, 255, 255, 0.04); 
-            border: 1px solid rgba(255, 255, 255, 0.06); 
-            border-radius: 14px; 
-            padding: 14px; 
-            margin-bottom: 10px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            box-sizing: border-box; 
-        }
-        .item-details h4 { margin: 0; font-size: 14px; color: #ffffff; }
-        .item-details p { margin: 4px 0 0 0; font-size: 11px; color: #6a7b95; }
-        
-        .yellow-go-btn { 
-            background: #ffd700; 
-            color: #050609; 
-            border: none; 
-            padding: 8px 20px; 
-            border-radius: 18px; 
-            font-size: 12px; 
-            font-weight: 700; 
-            cursor: pointer; 
-        }
+        /* Списки та картки */
+        .item-box { width: 100%; max-width: 320px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        .item-details h4 { margin: 0; font-size: 13px; color: #ffffff; }
+        .item-details p { margin: 3px 0 0 0; font-size: 10px; color: #6a7b95; }
+        .yellow-go-btn { background: #ffd700; color: #050609; border: none; padding: 6px 16px; border-radius: 14px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .chart-mock { width: 100%; max-width: 320px; background: rgba(0, 132, 255, 0.05); border: 1px solid rgba(0, 132, 255, 0.15); border-radius: 12px; padding: 12px; margin-bottom: 12px; box-sizing: border-box; text-align: left; }
+        .chart-title { font-size: 11px; color: #00e5ff; font-weight: bold; margin-bottom: 3px; }
 
-        .chart-mock { 
-            width: 100%; 
-            max-width: 340px; 
-            background: rgba(0, 132, 255, 0.05); 
-            border: 1px solid rgba(0, 132, 255, 0.15); 
-            border-radius: 14px; 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            box-sizing: border-box; 
-            text-align: left;
-        }
-        .chart-title { font-size: 12px; color: #00e5ff; font-weight: bold; margin-bottom: 5px; }
-
+        /* ПРИМУСОВО ПІДНЯТИЙ ТАББАР */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 65px;
-            background: #090a0f;
-            border-top: 1px solid rgba(0, 132, 255, 0.3);
+            bottom: 12px; /* Піднято на 12px від самого низу для обходу кнопок Android */
+            left: 10px;
+            right: 10px;
+            height: 56px;
+            background: #0f111a;
+            border: 1px solid rgba(0, 132, 255, 0.25);
+            border-radius: 16px;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             z-index: 9999;
             box-sizing: border-box;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
         .nav-tab {
             color: #53647c;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
@@ -198,22 +176,24 @@
             color: #ffd700;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
         }
-        .nav-tab .icon-dot { width: 4px; height: 4px; background: transparent; border-radius: 50%; margin-top: 3px; }
-        .nav-tab.active .icon-dot { background: #0084ff; box-shadow: 0 0 8px #0084ff; }
+        .nav-tab .icon-dot { width: 4px; height: 4px; background: transparent; border-radius: 50%; margin-top: 2px; }
+        .nav-tab.active .icon-dot { background: #0084ff; box-shadow: 0 0 6px #0084ff; }
     </style>
 </head>
 <body>
 
+    <!-- Шапка -->
     <div class="header-panel">
         <div class="assets-label">ASSETS</div>
         <div id="mainBal" class="main-balance">0.0000 ZRV</div>
-        <div>
-            <div class="sub-wallet">HOLDING WALLET: <span id="holdBal">0.0000</span></div>
-            <div class="sub-wallet">POOL WALLET: <span id="poolBal">0.0000</span></div>
+        <div class="wallets-row">
+            <div class="sub-wallet">HOLDING: <span id="holdBal">0.0000</span></div>
+            <div class="sub-wallet">POOL: <span id="poolBal">0.0000</span></div>
         </div>
         <div id="liveGain" class="pool-indicator">+0.0000</div>
     </div>
 
+    <!-- Зона контенту -->
     <div class="content-area">
         
         <!-- ЕКРАН 1: MINE -->
@@ -226,7 +206,7 @@
 
         <!-- ЕКРАН 2: TASKS -->
         <div id="screen-tasks" class="app-screen">
-            <h3 style="align-self: flex-start; margin: 5px 0 15px 0; font-size: 18px;">Earn Rewards</h3>
+            <h3 style="align-self: flex-start; margin: 5px 0 12px 0; font-size: 16px;">Earn Rewards</h3>
             <div class="item-box">
                 <div class="item-details"><h4>YouTube Like & Comment</h4><p>+10.0000 ZRV</p></div>
                 <button class="yellow-go-btn" onclick="doTask(10)">Go</button>
@@ -241,8 +221,8 @@
         <div id="screen-miners" class="app-screen">
             <div class="chart-mock">
                 <div class="chart-title">MY LEVEL JOURNEY</div>
-                <div id="levelDisplay" style="font-size: 14px; font-weight: bold; color: #fff;">Level 1 / 500</div>
-                <div id="speedDisplay" style="font-size: 11px; color:#6a7b95; margin-top:4px;">Speed: 1.00 TH/s</div>
+                <div id="levelDisplay" style="font-size: 13px; font-weight: bold; color: #fff;">Level 1 / 500</div>
+                <div id="speedDisplay" style="font-size: 10px; color:#6a7b95; margin-top:3px;">Speed: 1.00 TH/s</div>
             </div>
             <div id="upgradeBox" class="item-box" style="border: 1px solid #ffd700;">
                 <div class="item-details">
@@ -255,9 +235,9 @@
 
         <!-- ЕКРАН 4: FRIENDS -->
         <div id="screen-friends" class="app-screen">
-            <h3 style="align-self: flex-start; margin: 5px 0 10px 0; font-size: 18px;">Friends</h3>
+            <h3 style="align-self: flex-start; margin: 5px 0 10px 0; font-size: 16px;">Friends</h3>
             <div class="item-box" style="background: rgba(0, 132, 255, 0.05);">
-                <div class="item-details" style="width: 70%;">
+                <div class="item-details" style="width: 65%;">
                     <h4>Your Invite Link</h4>
                     <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">https://t.me</p>
                 </div>
@@ -276,6 +256,6 @@
         </div>
     </div>
 
+    <!-- Зафіксоване плаваюче меню -->
     <div class="bottom-nav">
-        <div class="nav-tab active" onclick="changeTab('mine')"><span>⛏️ Mine</span><div class="icon-dot"></div></div>
         
