@@ -65,6 +65,7 @@
             cursor: pointer;
             transition: transform 0.05s ease;
             touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .coin:active {
@@ -84,24 +85,25 @@
     </div>
 
     <script>
-        // Ініціалізація Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Розгортаємо додаток на весь екран смартфона
+        tg.expand();
 
-        let score = 0;
+        // Зчитуємо стартові дані, надіслані ботом з бази SQLite
+        const urlParams = new URLSearchParams(window.location.search);
+        let databaseBalance = parseInt(urlParams.get('balance')) || 0;
+        
+        let localClicksSession = 0; // Скільки наклікано за поточний візит
+        
         const balanceEl = document.getElementById('balance');
         const coinBtn = document.getElementById('coinBtn');
 
-        coinBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Запобігає випадковому зуму екрана при кліках
-            score += 1;
-            balanceEl.textContent = score;
+        // Відображаємо збережений баланс користувача з бази даних
+        balanceEl.textContent = databaseBalance;
+
+        // Обробка надійного кліку
+        coinBtn.addEventListener('click', (e) => {
+            localClicksSession += 1;
+            balanceEl.textContent = databaseBalance + localClicksSession;
             
-            // Створюємо вібровідгук на телефоні при кожному тапі
             if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-        });
-    </script>
-</body>
-</html>
+                
