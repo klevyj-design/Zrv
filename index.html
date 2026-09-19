@@ -14,27 +14,28 @@
             color: #ffffff;
             font-family: 'Segoe UI', Roboto, sans-serif;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
             box-sizing: border-box;
         }
 
-        /* ГОЛОВНИЙ ТРЮК: Зменшуємо масштаб усього інтерфейсу для коротких екранів */
-        body {
+        /* Основний контейнер програми */
+        .wrapper {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            position: relative;
-            padding-bottom: 90px; /* Великий запас знизу */
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            padding: 10px 15px 25px 15px; /* Захисний відступ знизу */
+            box-sizing: border-box;
         }
 
         /* Ультра-компактна шапка */
         .header-panel {
             text-align: center;
-            padding: 8px 10px 2px 10px;
-            flex-shrink: 0;
+            width: 100%;
         }
         .assets-label {
             font-size: 10px;
@@ -44,17 +45,17 @@
             font-weight: 600;
         }
         .main-balance {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
             color: #ffd700;
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-            margin: 1px 0;
+            margin: 2px 0;
         }
         .wallets-row {
             display: flex;
             justify-content: center;
             gap: 6px;
-            margin: 1px 0;
+            margin: 2px 0;
         }
         .sub-wallet {
             background: rgba(255, 255, 255, 0.02);
@@ -67,7 +68,7 @@
         .sub-wallet span { color: #ffd700; font-weight: bold; }
         
         .pool-indicator {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: #00e5ff;
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
@@ -79,6 +80,8 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             box-sizing: border-box;
         }
@@ -87,23 +90,22 @@
             display: none;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             width: 100%;
-            padding: 5px 15px;
-            box-sizing: border-box;
+            height: 100%;
         }
         .app-screen.active { display: flex; }
 
-        /* Зменшена монета для 100% сумісності */
+        /* Оптимальна монета ZRV */
         .coin-stage {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px 0;
-            margin-top: 5px;
         }
         .coin-zrv {
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             background: radial-gradient(circle, #ffd700 0%, #b8860b 100%);
             border-radius: 50%;
             border: 4px solid #0084ff;
@@ -111,7 +113,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 900;
             color: #111a2e;
             cursor: pointer;
@@ -119,10 +121,10 @@
         }
         .coin-zrv:active { transform: scale(0.96); }
 
-        /* Кнопка START / CLAIM піднята вище */
+        /* Жовта кнопка */
         .big-yellow-btn {
-            width: 90%;
-            max-width: 300px;
+            width: 100%;
+            max-width: 320px;
             background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
             color: #050609;
             border: none;
@@ -133,24 +135,21 @@
             text-transform: uppercase;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(255, 170, 0, 0.2);
-            margin: 15px 0 5px 0;
-            flex-shrink: 0;
+            margin: 10px 0;
         }
 
-        /* Елементи списків */
-        .item-box { width: 100%; max-width: 300px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+        /* Картки та списки для інших вкладок */
+        .item-box { width: 100%; max-width: 320px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
         .item-details h4 { margin: 0; font-size: 13px; color: #ffffff; }
         .item-details p { margin: 3px 0 0 0; font-size: 10px; color: #6a7b95; }
         .yellow-go-btn { background: #ffd700; color: #050609; border: none; padding: 6px 14px; border-radius: 14px; font-size: 11px; font-weight: 700; cursor: pointer; }
-        .chart-mock { width: 100%; max-width: 300px; background: rgba(0, 132, 255, 0.05); border: 1px solid rgba(0, 132, 255, 0.15); border-radius: 12px; padding: 12px; margin-bottom: 12px; box-sizing: border-box; text-align: left; }
+        .chart-mock { width: 100%; max-width: 320px; background: rgba(0, 132, 255, 0.05); border: 1px solid rgba(0, 132, 255, 0.15); border-radius: 12px; padding: 12px; margin-bottom: 12px; box-sizing: border-box; text-align: left; }
         .chart-title { font-size: 11px; color: #00e5ff; font-weight: bold; margin-bottom: 3px; }
 
-        /* НАД-ВИСОКИЙ ТАББАР ДЛЯ ОБХОДУ БЛОКУВАНЬ */
+        /* НОВА НАВІГАЦІЯ: БЕЗ ФІКСАЦІЇ, ПРЯМО В ПОТОЦІ КОНТЕНТУ */
         .bottom-nav {
-            position: absolute;
-            bottom: 25px; /* Радикально піднято вгору, щоб вилізти з-під кнопок Android */
-            left: 15px;
-            right: 15px;
+            width: 100%;
+            max-width: 320px;
             height: 52px;
             background: #0f111a;
             border: 1px solid rgba(0, 132, 255, 0.3);
@@ -158,10 +157,9 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            backdrop-filter: blur(20px);
-            z-index: 99999;
             box-sizing: border-box;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            margin-top: 5px;
         }
         .nav-tab {
             color: #53647c;
@@ -187,73 +185,72 @@
 </head>
 <body>
 
-    <!-- Шапка -->
-    <div class="header-panel">
-        <div class="assets-label">ASSETS</div>
-        <div id="mainBal" class="main-balance">0.0000 ZRV</div>
-        <div class="wallets-row">
-            <div class="sub-wallet">HOLDING: <span id="holdBal">0.0000</span></div>
-            <div class="sub-wallet">POOL: <span id="poolBal">0.0000</span></div>
-        </div>
-        <div id="liveGain" class="pool-indicator">+0.0000</div>
-    </div>
-
-    <!-- Область контенту -->
-    <div class="content-area">
-        
-        <!-- ЕКРАН 1: MINE -->
-        <div id="screen-mine" class="app-screen active">
-            <div class="coin-stage">
-                <div id="zrvCoin" class="coin-zrv">ZRV</div>
+    <div class="wrapper">
+        <!-- Шапка -->
+        <div class="header-panel">
+            <div class="assets-label">ASSETS</div>
+            <div id="mainBal" class="main-balance">0.0000 ZRV</div>
+            <div class="wallets-row">
+                <div class="sub-wallet">HOLDING: <span id="holdBal">0.0000</span></div>
+                <div class="sub-wallet">POOL: <span id="poolBal">0.0000</span></div>
             </div>
-            <button id="actionBtn" class="big-yellow-btn">START MINING (8H)</button>
+            <div id="liveGain" class="pool-indicator">+0.0000</div>
         </div>
 
-        <!-- ЕКРАН 2: TASKS -->
-        <div id="screen-tasks" class="app-screen">
-            <h3 style="align-self: flex-start; margin: 5px 0 10px 0; font-size: 15px;">Earn Rewards</h3>
-            <div class="item-box">
-                <div class="item-details"><h4>YouTube Like & Comment</h4><p>+10.0000 ZRV</p></div>
-                <button class="yellow-go-btn" onclick="doTask(10)">Go</button>
-            </div>
-            <div class="item-box">
-                <div class="item-details"><h4>X (Twitter) Retweet</h4><p>+5.0000 ZRV</p></div>
-                <button class="yellow-go-btn" onclick="doTask(5)">Go</button>
-            </div>
-        </div>
-
-        <!-- ЕКРАН 3: MINERS -->
-        <div id="screen-miners" class="app-screen">
-            <div class="chart-mock">
-                <div class="chart-title">MY LEVEL JOURNEY</div>
-                <div id="levelDisplay" style="font-size: 12px; font-weight: bold; color: #fff;">Level 1 / 500</div>
-                <div id="speedDisplay" style="font-size: 10px; color:#6a7b95; margin-top:2px;">Speed: 1.00 TH/s</div>
-            </div>
-            <div id="upgradeBox" class="item-box" style="border: 1px solid #ffd700;">
-                <div class="item-details">
-                    <h4>Upgrade Miner</h4>
-                    <p id="upgradeCostText">Cost: 50 ZRV</p>
+        <!-- Центральний контент -->
+        <div class="content-area">
+            
+            <!-- ЕКРАН 1: MINE -->
+            <div id="screen-mine" class="app-screen active">
+                <div class="coin-stage">
+                    <div id="zrvCoin" class="coin-zrv">ZRV</div>
                 </div>
-                <button id="upgradeBtn" class="yellow-go-btn" style="background:#00e5ff;">UPGRADE</button>
+                <button id="actionBtn" class="big-yellow-btn">START MINING (8H)</button>
             </div>
-        </div>
 
-        <!-- ЕКРАН 4: FRIENDS -->
-        <div id="screen-friends" class="app-screen">
-            <h3 style="align-self: flex-start; margin: 5px 0 10px 0; font-size: 15px;">Friends</h3>
-            <div class="item-box" style="background: rgba(0, 132, 255, 0.05);">
-                <div class="item-details" style="width: 65%;">
-                    <h4>Your Invite Link</h4>
-                    <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">https://t.me</p>
+            <!-- ЕКРАН 2: TASKS -->
+            <div id="screen-tasks" class="app-screen">
+                <h3 style="margin: 0 0 10px 0; font-size: 15px; width: 100%; text-align: left;">Earn Rewards</h3>
+                <div class="item-box">
+                    <div class="item-details"><h4>YouTube Like & Comment</h4><p>+10.0000 ZRV</p></div>
+                    <button class="yellow-go-btn" onclick="doTask(10)">Go</button>
                 </div>
-                <button class="yellow-go-btn" onclick="copyLink()">Copy</button>
+                <div class="item-box">
+                    <div class="item-details"><h4>X (Twitter) Retweet</h4><p>+5.0000 ZRV</p></div>
+                    <button class="yellow-go-btn" onclick="doTask(5)">Go</button>
+                </div>
             </div>
-        </div>
 
-        <!-- ЕКРАН 5: PROFILE -->
-        <div id="screen-profile" class="app-screen">
-            <div class="item-box">
-                <div class="item-details"><h4>User ID</h4><p id="profId">Loading...</p></div>
+            <!-- ЕКРАН 3: MINERS -->
+            <div id="screen-miners" class="app-screen">
+                <div class="chart-mock">
+                    <div class="chart-title">MY LEVEL JOURNEY</div>
+                    <div id="levelDisplay" style="font-size: 12px; font-weight: bold; color: #fff;">Level 1 / 500</div>
+                    <div id="speedDisplay" style="font-size: 10px; color:#6a7b95; margin-top:2px;">Speed: 1.00 TH/s</div>
+                </div>
+                <div id="upgradeBox" class="item-box" style="border: 1px solid #ffd700;">
+                    <div class="item-details">
+                        <h4>Upgrade Miner</h4>
+                        <p id="upgradeCostText">Cost: 50 ZRV</p>
+                    </div>
+                    <button id="upgradeBtn" class="yellow-go-btn" style="background:#00e5ff;">UPGRADE</button>
+                </div>
             </div>
-            <div class="item-box">
-                
+
+            <!-- ЕКРАН 4: FRIENDS -->
+            <div id="screen-friends" class="app-screen">
+                <h3 style="margin: 0 0 10px 0; font-size: 15px; width: 100%; text-align: left;">Friends</h3>
+                <div class="item-box" style="background: rgba(0, 132, 255, 0.05);">
+                    <div class="item-details" style="width: 65%;">
+                        <h4>Your Invite Link</h4>
+                        <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">https://t.me</p>
+                    </div>
+                    <button class="yellow-go-btn" onclick="copyLink()">Copy</button>
+                </div>
+            </div>
+
+            <!-- ЕКРАН 5: PROFILE -->
+            <div id="screen-profile" class="app-screen">
+                <div class="item-box">
+                    <div class="item-details"><h4>User ID</h4><p id="profId">Loading...</p></div>
+                </div>
